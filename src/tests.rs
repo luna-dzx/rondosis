@@ -3,3 +3,8 @@ use crate::{
     calculations::*
 };
 
+
+#[test]
+pub fn test_calculation(){
+
+}

@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 notan = "0.9.5"
 bevy_ecs = "0.10.1"
+nalgebra = "0.32.2"

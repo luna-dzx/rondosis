@@ -1,17 +1,17 @@
-#[cfg(test)]
-mod tests;
-
-mod rendering;
-mod calculations;
+use notan::app::Event;
+use notan::draw::*;
+use notan::prelude::*;
 
 use crate::{
     rendering::*,
     calculations::*
 };
 
-use notan::app::Event;
-use notan::draw::*;
-use notan::prelude::*;
+#[cfg(test)]
+mod tests;
+
+mod rendering;
+mod calculations;
 
 #[notan_main]
 fn main() -> Result<(), String>{
