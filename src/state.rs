@@ -3,7 +3,7 @@ use notan::draw::*;
 use notan::prelude::*;
 use nalgebra::Vector2;
 
-use crate::rendering::*;
+use crate::systems::*;
 
 #[derive(Resource)]
 pub struct RenderResources{
@@ -33,6 +33,11 @@ pub struct Velocity(pub Vector2<f32>);
 #[derive(Component)]
 pub struct TextureId(pub usize);
 
+#[derive(Component)]
+pub struct Gestation{
+    pub period:f32,
+    pub progress: f32
+}
 
 #[derive(AppState)]
 pub struct SimState {
@@ -44,7 +49,7 @@ impl SimState {
     pub fn new(gfx: &mut Graphics) -> Self {
         let texture = gfx
             .create_texture()
-            .from_image(include_bytes!("assets/golem-walk.png"))
+            .from_image(include_bytes!("assets/mycelium_froge.png"))
             .build()
             .unwrap();
 
@@ -55,10 +60,12 @@ impl SimState {
 
         //define each schedule
         //add systems to be ran on update
-        let mut  update_schedule = Schedule::new();
+        let mut update_schedule = Schedule::new();
+        update_schedule.add_system(wander);
+        update_schedule.add_system(grow);
         //add systems to be ran on draw
-        let mut  draw_schedule = Schedule::new();
-        draw_schedule.add_system(rendering);
+        let mut draw_schedule = Schedule::new();
+        draw_schedule.add_system(rendering::render);
 
         //add resources
         let render_resources = RenderResources{
@@ -72,9 +79,13 @@ impl SimState {
 
         //spawn entities
         world.spawn((
-            Position(Vector2::zeros()),
+            Position(Vector2::from_vec(vec![500.0,250.0])),
             TextureId(0),
-            Size(Vector2::from_vec(vec![100.0,100.0]))
+            Size(Vector2::from_vec(vec![100.0,100.0])),
+            Gestation{
+                period:1000.0,
+                progress:0.0
+            }
         ));
 
         Self {

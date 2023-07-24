@@ -2,10 +2,10 @@ use bevy_ecs::prelude::*;
 use notan::draw::*;
 use notan::prelude::*;
 
-use crate::calculations::*;
+use crate::state::*;
 
 //renders all entities with associated Position, Texture, and Size
-pub fn rendering(mut notan_draw:ResMut<NotanDraw>,render_resources: Res<RenderResources>,query: Query<(&Position,&Size, &TextureId)>){
+pub fn render(mut notan_draw:ResMut<NotanDraw>,render_resources: Res<RenderResources>,query: Query<(&Position,&Size, &TextureId)>){
     notan_draw.0.clear(Color::BLACK);
 
     for (pos,size, texture_id) in &query{

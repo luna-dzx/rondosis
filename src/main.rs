@@ -3,15 +3,15 @@ use notan::draw::*;
 use notan::prelude::*;
 
 use crate::{
-    rendering::*,
-    calculations::*
+    systems::*,
+    state::*
 };
 
 #[cfg(test)]
 mod tests;
 
-mod rendering;
-mod calculations;
+mod systems;
+mod state;
 
 #[notan_main]
 fn main() -> Result<(), String>{
@@ -26,10 +26,8 @@ pub fn update(app: &mut App, state: &mut SimState) {
     state.update_schedule.run(&mut state.world);
 }
 
-pub fn draw(app: &mut App, gfx: &mut Graphics, state: &mut SimState) {
+pub fn draw(app: &mut App, gfx: &mut Graphics, state: &mut SimState){
+    state.world.get_resource_mut::<NotanDraw>().unwrap().0 = gfx.create_draw();
     state.draw_schedule.run(&mut state.world);
-
-    let notan_draw = state.world.get_resource::<NotanDraw>().unwrap();
-
-    gfx.render(&notan_draw.0);
+    gfx.render(&state.world.get_resource::<NotanDraw>().unwrap().0);
 }
