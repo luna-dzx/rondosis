@@ -34,10 +34,7 @@ pub struct Velocity(pub Vector2<f32>);
 pub struct TextureId(pub usize);
 
 #[derive(Component)]
-pub struct Gestation{
-    pub period:f32,
-    pub progress: f32
-}
+pub struct Hunger(pub f32);
 
 #[derive(AppState)]
 pub struct SimState {
@@ -49,13 +46,27 @@ pub struct SimState {
 }
 impl SimState {
     pub fn new(gfx: &mut Graphics) -> Self {
-        let texture = gfx
+        let frog = gfx
             .create_texture()
             .from_image(include_bytes!("assets/mycelium_froge.png"))
             .build()
             .unwrap();
+        let bed = gfx
+            .create_texture()
+            .from_image(include_bytes!("assets/bed.png"))
+            .build()
+            .unwrap();
+        let sprite = gfx
+            .create_texture()
+            .from_image(include_bytes!("assets/sprite.png"))
+            .build()
+            .unwrap();
 
-        let textures = vec![texture];
+        let textures = vec![
+            frog,
+            bed,
+            sprite
+        ];
 
         //define the world
         let mut world = World::new();
@@ -64,7 +75,6 @@ impl SimState {
         //add systems to be ran on update
         let mut update_schedule = Schedule::new();
         update_schedule.add_system(wander);
-        update_schedule.add_system(grow);
         //add systems to be ran on draw
         let mut draw_schedule = Schedule::new();
         draw_schedule.add_system(rendering::render);
@@ -84,10 +94,18 @@ impl SimState {
             Position(Vector2::from_vec(vec![500.0,250.0])),
             TextureId(0),
             Size(Vector2::from_vec(vec![100.0,100.0])),
-            Gestation{
-                period:1000.0,
-                progress:0.0
-            }
+        ));
+
+        world.spawn((
+            Position(Vector2::from_vec(vec![250.0,250.0])),
+            TextureId(1),
+            Size(Vector2::from_vec(vec![100.0,100.0])),
+        ));
+
+        world.spawn((
+            Position(Vector2::from_vec(vec![700.0,400.0])),
+            TextureId(2),
+            Size(Vector2::from_vec(vec![75.0,75.0])),
         ));
 
         Self {
