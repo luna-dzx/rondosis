@@ -12,7 +12,9 @@ pub fn render(mut notan_draw:ResMut<NotanDraw>,render_resources: Res<RenderResou
         let tex = &render_resources.textures[texture_id.0];
 
         notan_draw.0.image(tex)
-            .size(size.0.x, size.0.y)
-            .position(pos.0.x, pos.0.y);
+            .size(size.0.x*render_resources.zoom, size.0.y*render_resources.zoom)
+            .position(
+                (pos.0.x+render_resources.cam_pos.x)*render_resources.zoom, 
+                (pos.0.y+render_resources.cam_pos.y)*render_resources.zoom);
     }
 }

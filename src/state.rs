@@ -43,7 +43,9 @@ pub struct Gestation{
 pub struct SimState {
     pub world: World,
     pub update_schedule: Schedule,
-    pub draw_schedule: Schedule
+    pub draw_schedule: Schedule,
+
+    pub last_mouse: Vector2<f32>
 }
 impl SimState {
     pub fn new(gfx: &mut Graphics) -> Self {
@@ -91,7 +93,8 @@ impl SimState {
         Self {
             world,
             update_schedule,
-            draw_schedule
+            draw_schedule,
+            last_mouse: Vector2::zeros()
         }
     }
 }
